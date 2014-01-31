@@ -1,6 +1,12 @@
 # Notkun: x = Spara(eign, innb, mark, tegund)
 # Fyrir: Ekkert
 # Eftir: Nyr Sparireikningur med tilheyrandi eiginleikum
+#
+# Breytur:
+#   eign: Upphafleg eign notanda, ma vera 0
+#   innb: Þad sem notandi getur lagt a reikning manadarlega
+#   mark: Uppi hvad vill notandi safna uppi
+#   tegund: Fyrirframskilgreind tegund reiknings
 class Spara:
 
     #Bua til nyjan reikning
