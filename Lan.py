@@ -19,4 +19,9 @@ class Lan:
         self.vextir = vextir
         self.verdt = verdt
 
+    #Notkun: x = TotalPay(l)
+    #Fyrir: l er breyta af taginu Lan
+    #Eftir: x inniheldur samanlagdan kostnad allra afborgana, t.e.a.s. hversu mikid var borgad til baka alls af lani
+    def TotalPay(self):
+        
 

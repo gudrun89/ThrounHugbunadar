@@ -32,7 +32,6 @@ class Spara:
             self.verdt = 0.04
 
 
-    #Reiknar ut hve marga manudi thad tekur ad safna fyrir markupphaed
     #Notkun: x = Timetoachieve(s)
     #Fyrir: s er breyta af taginu Spara
     #Eftir: x inniheldur fjolda manuda sem tekur ad safna uppi markupphaed
