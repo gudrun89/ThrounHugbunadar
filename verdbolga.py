@@ -12,6 +12,9 @@ with open('verdbolga1.csv', 'rb') as inflation:
             pass
 
 # Tekur inn tolu sem samsvarar dagsetningu(ur rodudum dagsetningum, elsta dagsetningin er nr null og nyjasta nr 288) og reiknar medalverdbolgu a thvi timabili
+#Notkun: x = averageindexed(date1, date2)
+#Fyrir: date1 og date2 eru heiltolur fra 0 uppi 288
+#Eftir: x inniheldur medalverdbolgu milli dagsetninga date1 og date2
 def averageindexed(date1, date2):
     dagsetn = sorted(verdbolga.keys())
     
