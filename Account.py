@@ -1,14 +1,27 @@
+import math
+
 class Account(object):
     def __init__(self, credit, deposit):
         self.credit = credit
         self.deposit = deposit
-
+        
 
     def getName(self):
         return self.__class__.__name__
 
     def transfer(self, amount):
         self.credit += amount
+
+    # Tekur inn upphaed og fjolda manuda
+    # Skilar hversu ha upphaedin verdur ordin a reikningnum ad manudunum loknum, ef reikningur er ekki bundinn tad lengi, annars -inf
+    def creditAfterMonths(self, deposit, months):
+        if (months < self.fixed):
+            return float('-infinity')
+        return deposit*(self.interest/12+1)**(months/12.0)
+
+    def monthsToGoal(self, goal):
+        return math.ceil(math.log(goal/self.credit)/math.log(self.interest/12+1))
+
 
 
 # Inherits from Account
@@ -119,7 +132,12 @@ class Fastvaxtareikningur12(Account):
         self.monthly = True
         super(Fastvaxtareikningur12, self).__init__(credit, deposit)
 
-
+# Tekur inn upphaed og fjolda manada
+# Skilar teim reikningi sem gefur haesta upphaed ad manudunum loknum og hversu ha hun er
+def getBestAccount(deposit, months):
+    accs = [cls(0,0) for cls in Account.__subclasses__()]   #einn hlutur af hverjum klasa
+    return max([(acc.creditAfterMonths(deposit, months), acc) for acc in accs])
+        
 
 if __name__ == "__main__":
     account = Heidursmerki(1000,100)
