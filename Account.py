@@ -17,7 +17,7 @@ class Account(object):
     def creditAfterMonths(self, deposit, months):
         if (months < self.fixed):
             return float('-infinity')
-        return deposit*(self.interest/12+1)**(months/12.0)
+        return deposit*(self.interest/12+1)**(months)
 
     def monthsToGoal(self, goal):
         return math.ceil(math.log(goal/self.credit)/math.log(self.interest/12+1))
