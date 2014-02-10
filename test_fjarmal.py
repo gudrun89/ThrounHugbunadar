@@ -9,5 +9,5 @@ from teiknaReikn import *
 
 
 
-#teiknar voxt sparireiknings
+#teiknar voxt sparireiknings Acc yfir tima months
 teiknaspari(Acc, months)
