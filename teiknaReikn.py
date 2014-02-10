@@ -48,6 +48,3 @@ def teiknaspari(Acc, months):
     plt.show()
 
 
-H = Heidursmerki(5000,0)
-
-teiknaspari(H, 12)
