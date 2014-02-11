@@ -48,6 +48,9 @@ def teiknaspari(Acc, months):
     plt.show()
 
 
+<<<<<<< HEAD
 #H = Heidursmerki(5000,0)
 
 #teiknaspari(H, 12)
+=======
+>>>>>>> 5e83cc0a928e03647754d7a0d58cdfe788293191
