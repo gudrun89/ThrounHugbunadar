@@ -32,7 +32,9 @@ class Loan:
 
     # months = length of loan
     # returns a list of the payment to be paid each month
-    def paymentPerMonth(self, months):
+    def paymentPerMonth(self, months=None):
+        if months is None:
+            months = self.months
         if (self.evenPayments):
             payms = [self.principal*(self.interest +  self.interest/((1+self.interest)**months - 1)) for _ in range(months+1)]
             return payms
@@ -45,7 +47,9 @@ class Loan:
 
     
     # returns the remaining principal after 'months' months
-    def principalAfterMonths(self, months):
+    def principalAfterMonths(self, months=None):
+        if months is None:
+            months = self.months
         if (self.evenPayments):
             p = self.principal
             for _ in range(months):
@@ -80,4 +84,18 @@ class Loan:
         principals = self.loanDevelopment(months)
         line, = plt.plot(range(0,months+1), principals)
         plt.show()
+
+
+    # returns how much interests you have paid back at the end of the loan
+    def loanBreakdown(self):
+        totPaym = sum(self.paymentPerMonth())
+        totInterest = totPaym - self.principal
+        return [totInterest, totInterest/float(self.principal)]
+
         
+    # plots the breakdown of the loan payments into principal and interests
+    def plotBreakdown(self):
+        labels = 'Principal', 'Interests'
+        amount = [self.principal, self.loanBreakdown()[0]]
+        plt.pie(amount, labels=labels)
+        plt.show()
