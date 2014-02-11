@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 
 class Account(object):
     def __init__(self, credit, deposit):
@@ -19,10 +20,15 @@ class Account(object):
             return float('-infinity')
         return deposit*(self.interest/12+1)**(months)
 
+    # returns number of months required to reach the goal credit
     def monthsToGoal(self, goal):
         return math.ceil(math.log(goal/self.credit)/math.log(self.interest/12+1))
 
-
+    # returns the development of the account for 'months' months
+    def accountDevelopment(self, months):
+        return map(lambda x: self.creditAfterMonths(self.credit,x), range(months+1))
+        
+    
 
 # Inherits from Account
 class Heidursmerki(Account):
