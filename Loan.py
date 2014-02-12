@@ -80,16 +80,13 @@ class Loan:
             balance.append(b)
         return balance
 
-    # returns a list of the paid balance each month for 'months' months
+    # returns a list of the accumulated paid balance over months
     def principalPayments(self, months=None):
         if months is None:
             months = self.months
         return map(lambda x: self.principal-x, self.balanceDevelopment(months))
-##        bal = self.balanceDevelopment(months)         # list of balance value over months
-##        p = self.paymentPerMonth(months)              # list of monthly payment over months
-##        return map(lambda x,y: x-y, p, map(lambda a: a*self.interest/12, bal))
 
-
+    # returns a list of the accumulated paid interests over months
     def interestPayments(self, months=None):
         if months is None:
             months = self.months
@@ -102,22 +99,12 @@ class Loan:
             intPaym.append(i)
         return intPaym
 
-
-    # plots the remaining principal as a function of months
-    def plotBalanceDevelopment(self, months=None):
-        if months is None:
-            months = self.months
-        principals = self.balanceDevelopment(months)
-        line, = plt.plot(range(0,months), principals)
-        plt.show()
-
-
+    # plots the accumulated interests paid, accumulated paid balance and the remaining balance
     def plotLoanDevelopment(self, m=None):
         if m is None:
             m = self.months
         plt.plot(range(m), self.balanceDevelopment(m), 'r--', range(m), self.principalPayments(m), 'b--', range(m), self.interestPayments(m), 'g--')
         plt.show()
-
 
 
 
