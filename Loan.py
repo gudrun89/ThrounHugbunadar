@@ -10,13 +10,16 @@ class Loan:
         self.indexed = indexed
         self.evenPayments = evenPayments
         self.months = months
-        self.monthPaym = monthPaym
+        self.monthPaym = monthPaym      #listi ef jafnar afborganir (evenPayments = False)
         if self.months is None and self.monthPaym is None:
             raise Exception('Either months or monthPaym must be specified')
         if self.months is None:
             self.months = self.monthsToPay(float(self.monthPaym))
         if self.monthPaym is None:
-            self.monthPaym = self.paymentPerMonth(self.months)[0]
+            if (self.evenPayments):
+                self.monthPaym = self.paymentPerMonth(self.months)[0]
+            else:
+                self.monthPaym = self.paymentPerMonth(self.months)  #ath. tetta er listi
             
 
     # decreases the principal by 'amount'
@@ -36,13 +39,14 @@ class Loan:
         if months is None:
             months = self.months
         if (self.evenPayments):
-            payms = [self.principal*(self.interest +  self.interest/((1+self.interest)**months - 1)) for _ in range(months+1)]
+            payms = [self.principal*(self.interest/12 +  (self.interest/12)/((1+self.interest/12)**months - 1)) for _ in range(months+1)]
             return payms
         payms = []
         p = self.principal
-        for m in range(months+1):
-            payms.append(p/float(months) + p*self.interest)
-            p = p - p/float(months)
+        monPay = self.principal/float(months)
+        for m in range(months):
+            payms.append(monPay + p*self.interest/12)
+            p = p*(1+self.interest/12) - (monPay + p*self.interest/12)
         return payms
 
     
@@ -53,37 +57,68 @@ class Loan:
         if (self.evenPayments):
             p = self.principal
             for _ in range(months):
-                p *= (1+self.interest)
-                p -= self.monthPaym
+                p = p*(1+self.interest/12) - self.monthPaym
             return p
         return self.principal - (self.principal/float(self.months))*months
     
 
-    # returns a list of the remaining principal each month for 'months' months
-    def loanDevelopment(self, months):
-        p = self.principal
-        if (self.evenPayments):
-            prin = []
-            prin.append(p)
-            for _ in range(months):
-                p *= (1+self.interest)
-                p -= self.monthPaym
-                prin.append(p)
-            return prin
-        pr = []
-        for m in range(months+1):
-            p *= (1+self.interest)
-            pr.append(p - (p/float(self.months))*m)
-        return pr
-        
-
-    # plots the remaining principal as a function of months
-    def plotLoanDevelopment(self, months=None):
+    # returns a list of the remaining balance each month for 'months' months
+    def balanceDevelopment(self, months=None):
         if months is None:
             months = self.months
-        principals = self.loanDevelopment(months)
-        line, = plt.plot(range(0,months+1), principals)
+        b = self.principal
+        if (self.evenPayments):
+            bal = []
+            #bal.append(b)
+            for _ in range(months):
+                b = b*(1+self.interest/12) - self.monthPaym
+                bal.append(b)
+            return bal
+        balance = []
+        for m in range(months):
+            b = b*(1+self.interest/12) - self.monthPaym[m]
+            balance.append(b)
+        return balance
+
+    # returns a list of the paid balance each month for 'months' months
+    def principalPayments(self, months=None):
+        if months is None:
+            months = self.months
+        return map(lambda x: self.principal-x, self.balanceDevelopment(months))
+##        bal = self.balanceDevelopment(months)         # list of balance value over months
+##        p = self.paymentPerMonth(months)              # list of monthly payment over months
+##        return map(lambda x,y: x-y, p, map(lambda a: a*self.interest/12, bal))
+
+
+    def interestPayments(self, months=None):
+        if months is None:
+            months = self.months
+        bal = self.balanceDevelopment(months)               # list of balance value over months
+        interests = map(lambda x: x*self.interest/12, bal)  # list of interests paid over months
+        intPaym = []
+        i = 0
+        for m in range(months):
+            i += interests[m]
+            intPaym.append(i)
+        return intPaym
+
+
+    # plots the remaining principal as a function of months
+    def plotBalanceDevelopment(self, months=None):
+        if months is None:
+            months = self.months
+        principals = self.balanceDevelopment(months)
+        line, = plt.plot(range(0,months), principals)
         plt.show()
+
+
+    def plotLoanDevelopment(self, m=None):
+        if m is None:
+            m = self.months
+        plt.plot(range(m), self.balanceDevelopment(m), 'r--', range(m), self.principalPayments(m), 'b--', range(m), self.interestPayments(m), 'g--')
+        plt.show()
+
+
 
 
     # returns how much interests you have paid back at the end of the loan
