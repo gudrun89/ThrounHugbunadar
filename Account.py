@@ -148,10 +148,10 @@ def getBestAccount(deposit, months):
     return max([(acc.creditAfterMonths(deposit, months), acc) for acc in accs])
         
 
-#Notkun: teiknaspari(Acc, months)
+#Notkun: plotAcc(Acc, months)
 #Fyrir: Acc er hlutur af taginu Account og months er heiltala
-#Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda m
-def teiknaspari(Acc, months):
+#Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
+def plotAcc(Acc, months):
     
     #Byr til nytt plot
     plt.figure()
@@ -160,7 +160,7 @@ def teiknaspari(Acc, months):
     C = Acc.credit
     i = Acc.interest
     
-    #Verdbolga er null reikningur se verdtryggdur
+    #Verdbolga er null nema reikningur se verdtryggdur
     v = 0
     
     #Naer i verdbolgutolu ef reikn er verdtryggdur, verdbolgan er medaltal sidustu 12 manada
@@ -170,22 +170,27 @@ def teiknaspari(Acc, months):
     #Teiknar voxt reiknings manadarlega
     for k in range(0, months):
         A = C*(1+(i+v)/12)
-        plt.plot([k,k+1],[C,A], color="r")
+        if (k < Acc.fixed):
+            p1, = plt.plot([k,k+1],[C,A], 'r')
+        else:
+            p2, = plt.plot([k,k+1],[C,A], 'g')
         C = A
     
-    #Teiknar linu thegar reikningur er aflaestur
-    if (Acc.fixed > 0):
-        plt.plot([Acc.fixed, Acc.fixed],[Acc.credit, C], color="k")
-
     #Asar grafsins skyrdir
     plt.xlabel("Months")
-    plt.ylabel("Balance [ISK]")
-
+    plt.ylabel("Credit [ISK]")
+    
     #Titill plotts
     plt.title("Account Development")
-
+    
     #Setur grid a grafid
     plt.grid()
-
+    
+    #Teiknar legend a graf
+    if (months > Acc.fixed):
+        plt.legend([p1, p2],['Fixed', 'Open'], loc = 2)
+    else:
+        plt.legend([p1], ['Fixed'], loc = 2)
+    
     #Synir plottid
     plt.show()
