@@ -150,7 +150,7 @@ def getBestAccount(deposit, months):
 
 #Notkun: plotAcc(Acc, months)
 #Fyrir: Acc er hlutur af taginu Account og months er heiltala
-#Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda m
+#Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
 def plotAcc(Acc, months):
     
     #Byr til nytt plot
