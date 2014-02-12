@@ -5,7 +5,7 @@ import math
 from verdbolga import *
 
 
-#Notkun: teiknaspari(h, m)
+#Notkun: teiknaspari(Acc, months)
 #Fyrir: Acc er hlutur af taginu Account og months er heiltala
 #Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda m
 def teiknaspari(Acc, months):
@@ -35,11 +35,11 @@ def teiknaspari(Acc, months):
         plt.plot([Acc.fixed, Acc.fixed],[Acc.credit, C], color="k")
 
     #Asar grafsins skyrdir
-    plt.xlabel("Manudir")
-    plt.ylabel("Innistaeda [ISK]")
+    plt.xlabel("Months")
+    plt.ylabel("Balance [ISK]")
 
     #Titill plotts
-    plt.title("Voxtur reiknings")
+    plt.title("Account Development")
 
     #Setur grid a grafid
     plt.grid()
