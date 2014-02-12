@@ -26,7 +26,8 @@ def savingsCalc():
         print 'After the fixed period,', acc.fixed, 'months, the credit will be', acc.creditAfterMonths(deposit, months)
     else:
         print 'You will reach your goal credit after', int(acc.monthsToGoal(goalCredit)), 'months'
-    
+    print getBestAccount(5000,5)
+    teiknaspari(acc,months)
 
 def loanCalc():
     principal = float(raw_input('Enter the initial principal of the loan:'))
