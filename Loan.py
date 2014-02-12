@@ -103,7 +103,15 @@ class Loan:
     def plotLoanDevelopment(self, m=None):
         if m is None:
             m = self.months
-        plt.plot(range(m), self.balanceDevelopment(m), 'r--', range(m), self.principalPayments(m), 'b--', range(m), self.interestPayments(m), 'g--')
+        p1, = plt.plot(range(m), self.balanceDevelopment(m), 'r--')
+        p2, = plt.plot(range(m), self.principalPayments(m), 'b--')
+        p3, = plt.plot(range(m), self.interestPayments(m), 'g--')
+        plt.legend([p1, p2, p3], ['Balance', 'Paid Principal', 'Paid Interests'], loc=2)
+        plt.xlabel('Months')
+        plt.ylabel('ISK')
+        plt.title('Loan Development')
+        plt.ylim(ymin=0)
+        plt.grid()
         plt.show()
 
 
