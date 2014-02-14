@@ -4,6 +4,7 @@
 # newclass.py
 
 import wx
+from Account import *
 
 class savingsGUI(wx.Frame):
 
@@ -52,7 +53,7 @@ class savingsGUI(wx.Frame):
 
         button3 = wx.Button(panel, label='Back')
         sizer.Add(button3, pos=(6, 0), flag=wx.LEFT, border=10)
-
+        
         button4 = wx.Button(panel, label="Ok")
         sizer.Add(button4, pos=(6, 3))
 
