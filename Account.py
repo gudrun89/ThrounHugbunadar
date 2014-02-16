@@ -9,7 +9,6 @@ class Account(object):
         self.credit = credit
         self.deposit = deposit
         
-
     def getName(self):
         return self.__class__.__name__
 
@@ -30,8 +29,41 @@ class Account(object):
     # returns the development of the account for 'months' months
     def accountDevelopment(self, months):
         return map(lambda x: self.creditAfterMonths(self.credit,x), range(months+1))
+
+    #Notkun: self.plotAcc(months)
+    #Fyrir: Acc er hlutur af taginu Account og months er heiltala
+    #Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
+    def plotAcc(self, months=None, goal=None):
+
+        if (months is None):
+            months = int(self.monthsToGoal(goal))
+        cred = self.credit
+        intrst = self.interest      
+        if (self.indexed):
+            infl = averageindexed(276, 288) # medaltal verdbolgu sidustu 2 manada ef reikn er verdtryggdur, annars 0
+        infl = 0
         
-    
+        #Teiknar voxt reiknings manadarlega
+        for m in range(0, months):
+            A = cred*(1+(intrst+infl)/12)
+            if (m < self.fixed):
+                p1, = plt.plot([m,m+1],[cred,A], 'r')
+            else:
+                p2, = plt.plot([m,m+1],[cred,A], 'g')
+            cred = A
+        if (goal is not None):
+            p3, = plt.plot(self.monthsToGoal(goal), goal, 'b*')
+
+        plt.xlabel('Months')
+        plt.ylabel('Credit [ISK]')
+        plt.title('Account Development')
+        plt.grid()
+        if (months > self.fixed):
+            plt.legend([p1, p2, p3],['Fixed', 'Open', 'Goal'], loc = 2)
+        else:
+            plt.legend([p1], ['Fixed'], loc = 2)
+        plt.show()
+
 
 # Inherits from Account
 class Heidursmerki(Account):
@@ -148,49 +180,3 @@ def getBestAccount(deposit, months):
     return max([(acc.creditAfterMonths(deposit, months), acc) for acc in accs])
         
 
-#Notkun: plotAcc(Acc, months)
-#Fyrir: Acc er hlutur af taginu Account og months er heiltala
-#Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
-def plotAcc(Acc, months):
-    
-    #Byr til nytt plot
-    plt.figure()
-    
-    #Setur innstaedu reikningsins i C og vexti hans i i
-    C = Acc.credit
-    i = Acc.interest
-    
-    #Verdbolga er null nema reikningur se verdtryggdur
-    v = 0
-    
-    #Naer i verdbolgutolu ef reikn er verdtryggdur, verdbolgan er medaltal sidustu 12 manada
-    if (Acc.indexed):
-        v = averageindexed(276, 288)
-    
-    #Teiknar voxt reiknings manadarlega
-    for k in range(0, months):
-        A = C*(1+(i+v)/12)
-        if (k < Acc.fixed):
-            p1, = plt.plot([k,k+1],[C,A], 'r')
-        else:
-            p2, = plt.plot([k,k+1],[C,A], 'g')
-        C = A
-    
-    #Asar grafsins skyrdir
-    plt.xlabel("Months")
-    plt.ylabel("Credit [ISK]")
-    
-    #Titill plotts
-    plt.title("Account Development")
-    
-    #Setur grid a grafid
-    plt.grid()
-    
-    #Teiknar legend a graf
-    if (months > Acc.fixed):
-        plt.legend([p1, p2],['Fixed', 'Open'], loc = 2)
-    else:
-        plt.legend([p1], ['Fixed'], loc = 2)
-    
-    #Synir plottid
-    plt.show()

@@ -4,15 +4,15 @@
 import wx
 from Loan import *
 from verdbolga import *
-
+from startGUI import *
 
 class loanGUI(wx.Frame):
 
     def __init__(self, parent, title):    
-        super(loanGUI, self).__init__(parent, title=title, size=(650, 400))
+        super(loanGUI, self).__init__(parent, title=title, size=(750, 500))
+        self.userLoans = []
         self.InitUI()
         self.Show()
-        self.userLoans = []
 
     def InitUI(self):
 
@@ -67,23 +67,36 @@ class loanGUI(wx.Frame):
         self.paymentBox = wx.RadioBox(panel, label='Type of payment', choices=['Even Payment', 'Even Principal reduction'])
         sizer.Add(self.paymentBox, pos=(6, 1), border=10)
 
+
+        # List of user loans
+        userLoanLabel = wx.StaticText(panel, label="Your loans:")
+        sizer.Add(userLoanLabel, pos=(7, 0), flag=wx.LEFT, border=10)
+        self.userLoanInput = wx.ComboBox(panel, choices=self.userLoans, style=wx.CB_READONLY)
+        self.userLoanInput.Bind(wx.EVT_COMBOBOX, self.onUserLoanChange)
+        sizer.Add(self.userLoanInput, pos=(7, 1), flag=wx.TOP|wx.EXPAND)
+        
+
         # Back, Add, Plot and Cancel buttons
         backButton = wx.Button(panel, label="Back")
-        sizer.Add(backButton, pos=(8, 0), flag=wx.LEFT, border=10)
+        backButton.Bind(wx.EVT_BUTTON, self.onBackButton)
+        sizer.Add(backButton, pos=(9, 0), flag=wx.LEFT, border=10)
+
         addButton = wx.Button(panel, label="Add")
         addButton.Bind(wx.EVT_BUTTON, self.addLoan)         # clicking addButton calls the function addLoan()
-        sizer.Add(addButton, pos=(8, 1))
+        sizer.Add(addButton, pos=(9, 1))
+
         plotButton = wx.Button(panel, label="Plot")
         plotButton.Bind(wx.EVT_BUTTON, self.plotLoan)       # clicking plotButton calls the function plotLoan()
-        sizer.Add(plotButton, pos=(8, 2))
+        sizer.Add(plotButton, pos=(9, 2))
+
         cancelButton = wx.Button(panel, label="Cancel")
-        sizer.Add(cancelButton, pos=(8, 3))
+        cancelButton.Bind(wx.EVT_BUTTON, self.onCancelButton)
+        sizer.Add(cancelButton, pos=(9, 3))
         
         panel.SetSizer(sizer)
 
 
     def plotLoan(self, event):
-        #btn = event.GetEventObject()                   # Getum notad ef vid turfum ad nalgast upplysingar um takkann
         prin = self.principalInput.GetValue()
         dur = int(self.durInput.GetValue())
         interest = float(self.interestInput.GetValue())/100.0
@@ -96,8 +109,39 @@ class loanGUI(wx.Frame):
         dur = int(self.durInput.GetValue())
         interest = float(self.interestInput.GetValue())/100.0
         infl = float(self.inflationInput.GetValue())/100.0
-        loan = Loan(prin, interest, False, True, dur)
+        ind = False
+        if (self.indexBox.GetSelection() == 0):
+            ind = True
+        evPaym = False
+        if (self.paymentBox.GetSelection() == 0):
+            evPaym = True
+        loan = Loan(prin, interest, ind , evPaym, dur)
         self.userLoans.append(loan)
+        self.userLoanInput.Append(loan.nameString)
+
+    def onCancelButton(self, event):
+        self.Close()
+
+    def onBackButton(self, event):
+        self.Close()
+        app = wx.App()
+        startGUI(None, title="Money Thinker™")
+        app.MainLoop()
+
+    def onUserLoanChange(self, event):
+        loanNum = event.GetEventObject().GetCurrentSelection()
+        loan = self.userLoans[loanNum]
+        self.principalInput.SetValue(str(loan.principal))
+        self.interestInput.SetValue(str(loan.interest*100))
+        self.durInput.SetValue(str(loan.months))
+        if (loan.indexed):
+            self.indexBox.SetSelection(0)
+        else:
+            self.indexBox.SetSelection(1)
+        if (loan.evenPayments):
+            self.paymentBox.SetSelection(0)
+        else:
+            self.paymentBox.SetSelection(1)
 
 if __name__ == '__main__':
     

@@ -20,7 +20,7 @@ class Loan:
                 self.monthPaym = self.paymentPerMonth(self.months)[0]
             else:
                 self.monthPaym = self.paymentPerMonth(self.months)  #ath. tetta er listi
-            
+        self.nameString = 'Principal: ' + str(self.principal) + ', Interest: ' + str(self.interest) + ', Duration: ' + str(self.months)
 
     # decreases the principal by 'amount'
     def makePayment(self, amount):
