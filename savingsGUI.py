@@ -1,88 +1,74 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# newclass.py
-
 import wx
 from Account import *
 
 class savingsGUI(wx.Frame):
 
     def __init__(self, parent, title):    
-        super(savingsGUI, self).__init__(parent, title=title, 
-            size=(450, 270))
-
+        super(savingsGUI, self).__init__(parent, title=title, size=(500, 350))
         self.InitUI()
-        self.Centre()
-        self.Show()     
-
+        self.Show()
+        self.userAccounts = []
 
     def InitUI(self):
       
         panel = wx.Panel(self)
-        
         sizer = wx.GridBagSizer(5, 5)
 
-        text1 = wx.StaticText(panel, label="Savings")
-        sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, 
-            border=15)
-
+        # Window title
+        guiTitle = wx.StaticText(panel, label="Savings")
+        titleFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)             # TO-DO: Breyta fontinum, er ljotur nuna
+        guiTitle.SetFont(titleFont)
+        sizer.Add(guiTitle, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=15)
         line = wx.StaticLine(panel)
-        sizer.Add(line, pos=(1, 0), span=(1, 5), 
-            flag=wx.EXPAND|wx.BOTTOM, border=10)
+        sizer.Add(line, pos=(1, 0), span=(1, 5), flag=wx.EXPAND|wx.BOTTOM, border=10)
+
+        # Account type combo box
+        accType = wx.StaticText(panel, label="Account Type")
+        sizer.Add(accType, pos=(2, 0), flag=wx.LEFT, border=10)
+        accs = [acc.__name__ for acc in Account.__subclasses__()]
+        cb1 = wx.ComboBox(panel, choices=accs, style=wx.CB_READONLY)
+        sizer.Add(cb1, pos=(2, 1), flag=wx.TOP|wx.EXPAND)
+
+        # Initial credit input box
+        creditLabel = wx.StaticText(panel, label='Initial credit')
+        sizer.Add(creditLabel, pos=(3,0), flag=wx.LEFT, border=10)
+        creditInput = wx.TextCtrl(panel)
+        sizer.Add(creditInput, pos=(3,1), flag=wx.TOP|wx.EXPAND)
+
+        # Goal credit input box
+        goalLabel = wx.StaticText(panel, label="Goal credit")
+        sizer.Add(goalLabel, pos=(4, 0), flag=wx.LEFT, border=10)
+        goalInput = wx.TextCtrl(panel)
+        sizer.Add(goalInput, pos=(4, 1), flag=wx.TOP|wx.EXPAND)
+
+        # Interest input box
+        interestLabel = wx.StaticText(panel, label="Interest")
+        sizer.Add(interestLabel, pos=(5, 0), flag=wx.LEFT|wx.TOP, border=10)
+        interestInput = wx.TextCtrl(panel)
+        sizer.Add(interestInput, pos=(5, 1), flag=wx.TOP|wx.EXPAND, border=5)
+
+        # Saving duration input box
+        durLabel = wx.StaticText(panel, label="Saving duration")
+        sizer.Add(durLabel, pos=(6, 0), flag=wx.TOP|wx.LEFT, border=10)
+        durInput = wx.TextCtrl(panel)
+        sizer.Add(durInput, pos=(6,1), flag=wx.TOP|wx.EXPAND, border=5)
 
 
-	lanteg = ["Heiðursmerki", "Sparileið 36", "Sparileið 48", "Sparileið 60", "Vaxtarsproti", "Vaxtaþrep", "Fastvaxtareikningur 1", "Fastvaxtareikningur 3", "Fastvaxtareikningur 6", "Fastvaxtareikningur 12"]
-	acctype = wx.StaticText(panel, label="Account Type")
-        sizer.Add(acctype, pos=(2, 0), flag=wx.LEFT, border=10)
-	
-	cb1 = wx.ComboBox(panel, choices=lanteg, style=wx.CB_READONLY)
-	sizer.Add(cb1, pos=(2, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND)
-
-
-        text2 = wx.StaticText(panel, label="Goal")
-        sizer.Add(text2, pos=(3, 0), flag=wx.LEFT, border=10)
-
-        tc1 = wx.TextCtrl(panel)
-        sizer.Add(tc1, pos=(3, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND)
-
-        text3 = wx.StaticText(panel, label="Interest")
-        sizer.Add(text3, pos=(4, 0), flag=wx.LEFT|wx.TOP, border=10)
-
-        tc2 = wx.TextCtrl(panel)
-        sizer.Add(tc2, pos=(4, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND, 
-            border=5)
-
-        text4 = wx.StaticText(panel, label="Savings of time")
-        sizer.Add(text4, pos=(5, 0), flag=wx.TOP|wx.LEFT, border=10)
-
-        tc3 = wx.TextCtrl(panel)
-        sizer.Add(tc3, pos=(5,1), span=(1,3), flag=wx.TOP|wx.EXPAND,
-	    border=5)
-
-        button3 = wx.Button(panel, label='Back')
-<<<<<<< HEAD
-        sizer.Add(button3, pos=(6, 0), flag=wx.LEFT, border=10)
+        # Back, OK and Cancel buttons
+        backButton = wx.Button(panel, label='Back')
+        sizer.Add(backButton, pos=(8, 0), flag=wx.LEFT, border=10)
         
-=======
-        sizer.Add(button3, pos=(7, 0), flag=wx.LEFT, border=10)
+        okButton = wx.Button(panel, label="OK")
+        sizer.Add(okButton, pos=(8, 3))
 
->>>>>>> 672c75b00398d356d3ba10f0b2e268448f20875f
-        button4 = wx.Button(panel, label="Ok")
-        sizer.Add(button4, pos=(7, 3))
+        cancelButton = wx.Button(panel, label="Cancel")
+        sizer.Add(cancelButton, pos=(8, 4), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
-        button5 = wx.Button(panel, label="Cancel")
-        sizer.Add(button5, pos=(7, 4), span=(1, 1),  
-            flag=wx.BOTTOM|wx.RIGHT, border=5)
-
-        sizer.AddGrowableCol(2)
-        
         panel.SetSizer(sizer)
-        
-        #self.Bind(wx.EVT_BUTTON, self.OnClose, id =1)
-	
-	#def OnClose(self,event):
-	 # self.Close()
+
 
 if __name__ == '__main__':
   
