@@ -20,35 +20,35 @@ class Test(unittest.TestCase):
     self.assertGreater(acc.accountDevelopment(12),11)
 
   def test_Spara1(self):
-	test = Spara(1000,100,2000,1)
-	self.assertGreater(test.Timetoachieve(),5)
-	
+    test = Spara(1000,100,2000,1)
+    self.assertGreater(test.Timetoachieve(),5)
+    
   def test_Spara2(self):
-	avg = averageindexed(200,250)
-	self.assertLess(0.02,avg)
-	
+    avg = averageindexed(200,250)
+    self.assertLess(0.02,avg)
+    
   def test_Loan1(self):
-	t1 = Loan(1000, 5, 0, 0, 12, )
-	self.assertLess(t1.makePayment(500), 1000)
-	
+    t1 = Loan(1000, 5, 0, 0, 12, )
+    self.assertLess(t1.makePayment(500), 1000)
+    
   def test_Loan2(self):
-	t1 = Loan(1000, 5, 0, 0, 12, )
-	self.assertGreater(t1.monthsToPay,5)
-	
+    t1 = Loan(1000, 5, 0, 0, 12, )
+    self.assertGreater(t1.monthsToPay,5)
+    
   def test_Loan3(self):
-	t1 = Loan(1000, 5, 0, 0, 12, )
-	self.assertLess(t1.principalAfterMonths(2),1000)
-	
+    t1 = Loan(1000, 5, 0, 0, 12, )
+    self.assertLess(t1.principalAfterMonths(2),1000)
+    
   def test_Loan4(self):
-	t1 = Loan(1000, 5, 0, 0, 12, )
-	self.assertGreater(t1.loanBreakdown(),50)
-	
+    t1 = Loan(1000, 5, 0, 0, 12, )
+    self.assertGreater(t1.loanBreakdown(),50)
+    
   def test_Loan5(self):
-	t1 = Loan(1000, 5, 0, 0, 12, )
-	t2 = [100]
-	self.assertLess(t1.principalPayments,t2)
-	
-	
+    t1 = Loan(1000, 5, 0, 0, 12, )
+    t2 = [100]
+    self.assertLess(t1.principalPayments,t2)
+    
+    
 
 if __name__== '__main__':
   unittest.main()

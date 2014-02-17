@@ -30,6 +30,9 @@ class Account(object):
     def accountDevelopment(self, months):
         return map(lambda x: self.creditAfterMonths(self.credit,x), range(months+1))
 
+    def monthProfit(self, amnt):
+        return amnt * self.interest/12 
+    
     #Notkun: self.plotAcc(months)
     #Fyrir: Acc er hlutur af taginu Account og months er heiltala
     #Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
@@ -58,8 +61,10 @@ class Account(object):
         plt.ylabel('Credit [ISK]')
         plt.title('Account Development')
         plt.grid()
-        if (months > self.fixed):
+        if (months > self.fixed and goal is not None):
             plt.legend([p1, p2, p3],['Fixed', 'Open', 'Goal'], loc = 2)
+        elif(months > self.fixed):
+            plt.legend([p1, p2],['Fixed', 'Open'], loc = 2)
         else:
             plt.legend([p1], ['Fixed'], loc = 2)
         plt.show()

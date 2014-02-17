@@ -69,7 +69,6 @@ class Loan:
         b = self.principal
         if (self.evenPayments):
             bal = []
-            #bal.append(b)
             for _ in range(months):
                 b = b*(1+self.interest/12) - self.monthPaym
                 bal.append(b)
@@ -129,3 +128,6 @@ class Loan:
         amount = [self.principal, self.loanBreakdown()[0]]
         plt.pie(amount, labels=labels)
         plt.show()
+
+    def monthPrinDecrease(self, amnt):
+        return amnt*(self.interest/12)

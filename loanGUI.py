@@ -3,6 +3,7 @@
 
 import wx
 from Loan import *
+from Account import *
 from verdbolga import *
 from startGUI import *
 
@@ -58,6 +59,11 @@ class loanGUI(wx.Frame):
         sizer.Add(self.inflationInput, pos=(5,1), flag=wx.TOP|wx.EXPAND, border=5)
         inflPercent = wx.StaticText(panel, label="%")
         sizer.Add(inflPercent, pos=(5,2), flag=wx.LEFT|wx.TOP, border = 10)
+
+        # Default inflation button
+        inflButton = wx.Button(panel, label="Default inflation")
+        inflButton.Bind(wx.EVT_BUTTON, self.onInflButton)
+        sizer.Add(inflButton, pos=(5, 3), flag=wx.LEFT, border=10)
     
         # Loan indexed radio buttons    
         self.indexBox = wx.RadioBox(panel,  label='Indexed', choices=['Yes', 'No'])
@@ -65,15 +71,25 @@ class loanGUI(wx.Frame):
 
         # Type of payment radio buttons
         self.paymentBox = wx.RadioBox(panel, label='Type of payment', choices=['Even Payment', 'Even Principal reduction'])
-        sizer.Add(self.paymentBox, pos=(6, 1), border=10)
+        sizer.Add(self.paymentBox, pos=(6, 1), span=(1,3), border=10)
 
+        # Where to put a savings amount
+        savingsLabel = wx.StaticText(panel, label="What should I do with my money?")
+        sizer.Add(savingsLabel, pos=(2, 3), span=(1,2), flag=wx.LEFT, border=10)
+        saveAmountLabel = wx.StaticText(panel, label="Amount")
+        sizer.Add(saveAmountLabel, pos=(3, 3), flag=wx.LEFT, border=10)
+        self.saveAmountInput = wx.TextCtrl(panel)                                    
+        sizer.Add(self.saveAmountInput, pos=(3, 4), flag=wx.TOP|wx.EXPAND)
+        savingsButton = wx.Button(panel, label="Calculate")
+        savingsButton.Bind(wx.EVT_BUTTON, self.onCalculateButton)
+        sizer.Add(savingsButton, pos=(4, 4), flag=wx.LEFT, border=10)
 
         # List of user loans
         userLoanLabel = wx.StaticText(panel, label="Your loans:")
         sizer.Add(userLoanLabel, pos=(7, 0), flag=wx.LEFT, border=10)
         self.userLoanInput = wx.ComboBox(panel, choices=self.userLoans, style=wx.CB_READONLY)
         self.userLoanInput.Bind(wx.EVT_COMBOBOX, self.onUserLoanChange)
-        sizer.Add(self.userLoanInput, pos=(7, 1), flag=wx.TOP|wx.EXPAND)
+        sizer.Add(self.userLoanInput, pos=(7, 1), span=(1,2), flag=wx.TOP|wx.EXPAND)
         
 
         # Back, Add, Plot and Cancel buttons
@@ -143,6 +159,17 @@ class loanGUI(wx.Frame):
         else:
             self.paymentBox.SetSelection(1)
 
+
+    def onCalculateButton(self, event):
+        accs = [cls(0,0) for cls in Account.__subclasses__()] 
+        maxLn = max([(ln.monthPrinDecrease(float(self.saveAmountInput.GetValue())), ln.nameString) for ln in self.userLoans])
+        maxSave = max([(acc.monthProfit(float(self.saveAmountInput.GetValue())), acc.getName()) for acc in accs])
+        print max(maxLn, maxSave)
+        return max(maxLn, maxSave)
+
+    def onInflButton(self, event):
+        self.inflationInput.SetValue(str(averageindexed(276,288)*100))
+        
 if __name__ == '__main__':
     
     app = wx.App()
