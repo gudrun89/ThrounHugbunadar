@@ -40,17 +40,19 @@ class Account(object):
 
         if (months is None):
             months = int(self.monthsToGoal(goal))
-        cred = self.credit
-        intrst = self.interest      
+        #Inneign reiknings er byrjunarupphaed + manadarleg radstofun
+        cred = self.credit + self.deposit
+        intrst = self.interest
+        infl = 0
         if (self.indexed):
             infl = averageindexed(276, 288) # medaltal verdbolgu sidustu 2 manada ef reikn er verdtryggdur, annars 0
-        infl = 0
-        
+    
         #Teiknar voxt reiknings manadarlega
         for m in range(0, months):
             A = cred*(1+(intrst+infl)/12)
             if (m < self.fixed):
                 p1, = plt.plot([m,m+1],[cred,A], 'r')
+                cred += 
             else:
                 p2, = plt.plot([m,m+1],[cred,A], 'g')
             cred = A
