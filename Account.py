@@ -52,10 +52,11 @@ class Account(object):
             A = cred*(1+(intrst+infl)/12)
             if (m < self.fixed):
                 p1, = plt.plot([m,m+1],[cred,A], 'r')
-                cred += 
+                plt.plot([m+1, m+1],[A, A+self.deposit], 'r')
             else:
                 p2, = plt.plot([m,m+1],[cred,A], 'g')
-            cred = A
+                plt.plot([m+1, m+1],[A, A+self.deposit], 'g')
+            cred = A + self.deposit
         if (goal is not None):
             p3, = plt.plot(self.monthsToGoal(goal), goal, 'b*')
 
