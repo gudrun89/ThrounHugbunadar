@@ -43,37 +43,45 @@ class savingsGUI(wx.Frame):
         iskLabel = wx.StaticText(panel, label="ISK")
         sizer.Add(iskLabel, pos=(3,2), flag=wx.LEFT|wx.TOP, border = 10)
 
-        # Goal credit input box
-        goalLabel = wx.StaticText(panel, label="Goal credit")
-        sizer.Add(goalLabel, pos=(4, 0), flag=wx.LEFT, border=10)
-        self.goalInput = wx.TextCtrl(panel)
-        sizer.Add(self.goalInput, pos=(4, 1), flag=wx.TOP|wx.EXPAND)
+        # Monthly deposit input box
+        depositLabel = wx.StaticText(panel, label='Monthly deposit')
+        sizer.Add(depositLabel, pos=(4,0), flag=wx.LEFT, border=10)
+        self.depositInput = wx.TextCtrl(panel)
+        sizer.Add(self.depositInput, pos=(4,1), flag=wx.TOP|wx.EXPAND)
         iskLabel = wx.StaticText(panel, label="ISK")
         sizer.Add(iskLabel, pos=(4,2), flag=wx.LEFT|wx.TOP, border = 10)
 
+        # Goal credit input box
+        goalLabel = wx.StaticText(panel, label="Goal credit")
+        sizer.Add(goalLabel, pos=(5, 0), flag=wx.LEFT, border=10)
+        self.goalInput = wx.TextCtrl(panel)
+        sizer.Add(self.goalInput, pos=(5, 1), flag=wx.TOP|wx.EXPAND)
+        iskLabel = wx.StaticText(panel, label="ISK")
+        sizer.Add(iskLabel, pos=(5,2), flag=wx.LEFT|wx.TOP, border = 10)
+
         # Interest input box
         interestLabel = wx.StaticText(panel, label="Interest")
-        sizer.Add(interestLabel, pos=(5, 0), flag=wx.LEFT|wx.TOP, border=10)
+        sizer.Add(interestLabel, pos=(6, 0), flag=wx.LEFT|wx.TOP, border=10)
         self.interestInput = wx.TextCtrl(panel)
-        sizer.Add(self.interestInput, pos=(5, 1), flag=wx.TOP|wx.EXPAND, border=5)
+        sizer.Add(self.interestInput, pos=(6, 1), flag=wx.TOP|wx.EXPAND, border=5)
         intPercent = wx.StaticText(panel, label="%")
-        sizer.Add(intPercent, pos=(5,2), flag=wx.LEFT|wx.TOP, border = 10)
+        sizer.Add(intPercent, pos=(6,2), flag=wx.LEFT|wx.TOP, border = 10)
 
         # Fixed duration input box
         fixedLabel = wx.StaticText(panel, label='Fixed length')
-        sizer.Add(fixedLabel, pos=(6, 0), flag=wx.LEFT|wx.TOP, border=10)
+        sizer.Add(fixedLabel, pos=(7, 0), flag=wx.LEFT|wx.TOP, border=10)
         self.fixedInput = wx.TextCtrl(panel)
-        sizer.Add(self.fixedInput, pos=(6,1), flag=wx.TOP|wx.EXPAND, border=5)
+        sizer.Add(self.fixedInput, pos=(7,1), flag=wx.TOP|wx.EXPAND, border=5)
         monLabel = wx.StaticText(panel, label="Months")
-        sizer.Add(monLabel, pos=(6,2), flag=wx.LEFT|wx.TOP, border = 10)
+        sizer.Add(monLabel, pos=(7,2), flag=wx.LEFT|wx.TOP, border = 10)
 
         # Saving duration input box
         durLabel = wx.StaticText(panel, label="Saving duration")
-        sizer.Add(durLabel, pos=(7, 0), flag=wx.TOP|wx.LEFT, border=10)
+        sizer.Add(durLabel, pos=(8, 0), flag=wx.TOP|wx.LEFT, border=10)
         self.durInput = wx.TextCtrl(panel)
-        sizer.Add(self.durInput, pos=(7,1), flag=wx.TOP|wx.EXPAND, border=5)
+        sizer.Add(self.durInput, pos=(8,1), flag=wx.TOP|wx.EXPAND, border=5)
         monLabel = wx.StaticText(panel, label="Months")
-        sizer.Add(monLabel, pos=(7,2), flag=wx.LEFT|wx.TOP, border = 10)
+        sizer.Add(monLabel, pos=(8,2), flag=wx.LEFT|wx.TOP, border = 10)
 
         # Back, OK and Cancel buttons
         backButton = wx.Button(panel, label='Back')
@@ -82,11 +90,15 @@ class savingsGUI(wx.Frame):
         
         okButton = wx.Button(panel, label="OK")
         okButton.Bind(wx.EVT_BUTTON, self.onOkButton)
-        sizer.Add(okButton, pos=(9, 3))
+        sizer.Add(okButton, pos=(9, 1))
+
+        compareButton = wx.Button(panel, label="Compare with no deposit")
+        compareButton.Bind(wx.EVT_BUTTON, self.onCompareButton)
+        sizer.Add(compareButton, pos=(9, 2))
 
         cancelButton = wx.Button(panel, label="Cancel")
         cancelButton.Bind(wx.EVT_BUTTON, self.onCancelButton)
-        sizer.Add(cancelButton, pos=(9, 4), flag=wx.BOTTOM|wx.RIGHT, border=5)
+        sizer.Add(cancelButton, pos=(9, 3), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
         panel.SetSizer(sizer)
 
@@ -98,11 +110,17 @@ class savingsGUI(wx.Frame):
 
     def onOkButton(self, event):
         accTypeNum = self.accTypeInput.GetCurrentSelection()
-        acc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()),0)
+        acc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), float(self.depositInput.GetValue()))
         if (self.durInput.GetValue() == ''):
             acc.plotAcc(goal=float(self.goalInput.GetValue()))
         else:
             acc.plotAcc(int(self.durInput.GetValue()), float(self.goalInput.GetValue()))
+
+    def onCompareButton(self, event):
+        accTypeNum = self.accTypeInput.GetCurrentSelection()
+        acc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), float(self.depositInput.GetValue()))
+        noDepAcc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), 0)
+        comparePlots(acc, noDepAcc, int(self.durInput.GetValue()), 'Monthly deposit', 'No deposit')
 
     def onBackButton(self, event):
         self.Close()
