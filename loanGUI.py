@@ -141,7 +141,7 @@ class loanGUI(wx.Frame):
     def onBackButton(self, event):
         self.Close()
         app = wx.App()
-        startGUI(None, title="Money Thinker™")
+        startGUI(None, title="Money Thinker")
         app.MainLoop()
 
     def onUserLoanChange(self, event):

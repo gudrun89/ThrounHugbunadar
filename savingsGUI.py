@@ -135,7 +135,7 @@ class savingsGUI(wx.Frame):
     def onBackButton(self, event):
         self.Close()
         app = wx.App()
-        startGUI(None, title="Money Thinker™")
+        startGUI(None, title="Money Thinker")
         app.MainLoop()
 
     def onQuitButton(self, event):
