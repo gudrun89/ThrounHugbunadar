@@ -83,7 +83,7 @@ class savingsGUI(wx.Frame):
         monLabel = wx.StaticText(panel, label="Months")
         sizer.Add(monLabel, pos=(8,2), flag=wx.LEFT|wx.TOP, border = 10)
 
-        # Back, OK and Cancel buttons
+        # Back, OK and Quit buttons
         backButton = wx.Button(panel, label='Back')
         backButton.Bind(wx.EVT_BUTTON, self.onBackButton)
         sizer.Add(backButton, pos=(9, 0), flag=wx.LEFT, border=10)
@@ -96,9 +96,9 @@ class savingsGUI(wx.Frame):
         compareButton.Bind(wx.EVT_BUTTON, self.onCompareButton)
         sizer.Add(compareButton, pos=(9, 2))
 
-        cancelButton = wx.Button(panel, label="Cancel")
-        cancelButton.Bind(wx.EVT_BUTTON, self.onCancelButton)
-        sizer.Add(cancelButton, pos=(9, 3), flag=wx.BOTTOM|wx.RIGHT, border=5)
+        quitButton = wx.Button(panel, label="Quit")
+        quitButton.Bind(wx.EVT_BUTTON, self.onQuitButton)
+        sizer.Add(quitButton, pos=(9, 3), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
         panel.SetSizer(sizer)
 
@@ -128,7 +128,7 @@ class savingsGUI(wx.Frame):
         startGUI(None, title="Money Thinker™")
         app.MainLoop()
 
-    def onCancelButton(self, event):
+    def onQuitButton(self, event):
         self.Close()
         
 

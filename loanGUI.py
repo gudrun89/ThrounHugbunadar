@@ -10,7 +10,7 @@ from startGUI import *
 class loanGUI(wx.Frame):
 
     def __init__(self, parent, title):    
-        super(loanGUI, self).__init__(parent, title=title, size=(750, 500))
+        super(loanGUI, self).__init__(parent, title=title, size=(600, 600))
         self.userLoans = []
         self.InitUI()
         self.Show()
@@ -18,7 +18,7 @@ class loanGUI(wx.Frame):
     def InitUI(self):
 
         panel = wx.Panel(self)
-        sizer = wx.GridBagSizer(10, 5)
+        sizer = wx.GridBagSizer(12, 5)
         
         # Window Title
         guiTitle = wx.StaticText(panel, label="Loan Calculator")
@@ -63,15 +63,15 @@ class loanGUI(wx.Frame):
         # Default inflation button
         inflButton = wx.Button(panel, label="Default inflation")
         inflButton.Bind(wx.EVT_BUTTON, self.onInflButton)
-        sizer.Add(inflButton, pos=(5, 3), flag=wx.LEFT, border=10)
+        sizer.Add(inflButton, pos=(6, 1), flag=wx.LEFT, border=10)
     
         # Loan indexed radio buttons    
         self.indexBox = wx.RadioBox(panel,  label='Indexed', choices=['Yes', 'No'])
-        sizer.Add(self.indexBox, pos=(6, 0), flag=wx.LEFT, border=10)
+        sizer.Add(self.indexBox, pos=(7, 0), flag=wx.LEFT, border=10)
 
         # Type of payment radio buttons
         self.paymentBox = wx.RadioBox(panel, label='Type of payment', choices=['Even Payment', 'Even Principal reduction'])
-        sizer.Add(self.paymentBox, pos=(6, 1), span=(1,3), border=10)
+        sizer.Add(self.paymentBox, pos=(8, 0), span=(1,3), border=10)
 
         # Where to put a savings amount
         savingsLabel = wx.StaticText(panel, label="What should I do with my money?")
@@ -86,28 +86,28 @@ class loanGUI(wx.Frame):
 
         # List of user loans
         userLoanLabel = wx.StaticText(panel, label="Your loans:")
-        sizer.Add(userLoanLabel, pos=(7, 0), flag=wx.LEFT, border=10)
+        sizer.Add(userLoanLabel, pos=(9, 0), flag=wx.LEFT, border=10)
         self.userLoanInput = wx.ComboBox(panel, choices=self.userLoans, style=wx.CB_READONLY)
         self.userLoanInput.Bind(wx.EVT_COMBOBOX, self.onUserLoanChange)
-        sizer.Add(self.userLoanInput, pos=(7, 1), span=(1,2), flag=wx.TOP|wx.EXPAND)
+        sizer.Add(self.userLoanInput, pos=(9, 1), span=(1,2), flag=wx.TOP|wx.EXPAND)
         
 
-        # Back, Add, Plot and Cancel buttons
+        # Back, Add, Plot and Quit buttons
         backButton = wx.Button(panel, label="Back")
         backButton.Bind(wx.EVT_BUTTON, self.onBackButton)
-        sizer.Add(backButton, pos=(9, 0), flag=wx.LEFT, border=10)
+        sizer.Add(backButton, pos=(11, 0), flag=wx.LEFT, border=10)
 
         addButton = wx.Button(panel, label="Add")
         addButton.Bind(wx.EVT_BUTTON, self.addLoan)         # clicking addButton calls the function addLoan()
-        sizer.Add(addButton, pos=(9, 1))
+        sizer.Add(addButton, pos=(11, 1))
 
         plotButton = wx.Button(panel, label="Plot")
         plotButton.Bind(wx.EVT_BUTTON, self.plotLoan)       # clicking plotButton calls the function plotLoan()
-        sizer.Add(plotButton, pos=(9, 2))
+        sizer.Add(plotButton, pos=(11, 2))
 
-        cancelButton = wx.Button(panel, label="Cancel")
-        cancelButton.Bind(wx.EVT_BUTTON, self.onCancelButton)
-        sizer.Add(cancelButton, pos=(9, 3))
+        quitButton = wx.Button(panel, label="Quit")
+        quitButton.Bind(wx.EVT_BUTTON, self.onQuitButton)
+        sizer.Add(quitButton, pos=(11, 4))
         
         panel.SetSizer(sizer)
 
@@ -135,7 +135,7 @@ class loanGUI(wx.Frame):
         self.userLoans.append(loan)
         self.userLoanInput.Append(loan.nameString)
 
-    def onCancelButton(self, event):
+    def onQuitButton(self, event):
         self.Close()
 
     def onBackButton(self, event):
