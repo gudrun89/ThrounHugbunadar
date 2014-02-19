@@ -44,7 +44,7 @@ class Account(object):
 
     # returns the increased profit after one month from adding amnt on the account
     def monthProfit(self, amnt):
-        return amnt * self.interest+self/12 
+        return amnt * self.interest/12 
     
     #Notkun: self.plotAcc(months)
     #Fyrir: Acc er hlutur af taginu Account, months og goal eru heiltolur 
