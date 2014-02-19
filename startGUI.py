@@ -40,17 +40,17 @@ class startGUI(wx.Frame):
 
     def openSavings(self, event):
         app = wx.App()
-        savingsGUI(None, title="Money Thinker™")
+        savingsGUI(None, title="Money Thinker")
         app.MainLoop()
 
     def openLoans(self, event):
         app = wx.App()
-        loanGUI(None, title="Money Thinker™")
+        loanGUI(None, title="Money Thinker")
         app.MainLoop()
         
     
 if __name__ == '__main__':
   
     app = wx.App()
-    startGUI(None, title="Money Thinker™")
+    startGUI(None, title="Money Thinker")
     app.MainLoop()
