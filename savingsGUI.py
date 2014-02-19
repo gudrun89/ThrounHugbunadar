@@ -8,11 +8,7 @@ from startGUI import *
 class savingsGUI(wx.Frame):
 
     def __init__(self, parent, title):    
-<<<<<<< HEAD
-        super(savingsGUI, self).__init__(parent, title=title,size=(550, 400))
-=======
         super(savingsGUI, self).__init__(parent, title=title,size=(550, 450))
->>>>>>> 2b15c3e9106989acb4bbb65a6073f2336a04da9d
         self.InitUI()
         self.Show()
         self.userAccounts = []
@@ -98,19 +94,19 @@ class savingsGUI(wx.Frame):
         # Back, OK and Quit buttons
         backButton = wx.Button(panel, label='Back')
         backButton.Bind(wx.EVT_BUTTON, self.onBackButton)
-        sizer.Add(backButton, pos=(10, 0), flag=wx.LEFT, border=10)
+        sizer.Add(backButton, pos=(11, 0), flag=wx.LEFT, border=10)
         
         okButton = wx.Button(panel, label="OK")
         okButton.Bind(wx.EVT_BUTTON, self.onOkButton)
-        sizer.Add(okButton, pos=(10, 1))
+        sizer.Add(okButton, pos=(11, 1))
 
         compareButton = wx.Button(panel, label="Compare with no deposit")
         compareButton.Bind(wx.EVT_BUTTON, self.onCompareButton)
-        sizer.Add(compareButton, pos=(10, 2))
+        sizer.Add(compareButton, pos=(11, 2))
 
         quitButton = wx.Button(panel, label="Quit")
         quitButton.Bind(wx.EVT_BUTTON, self.onQuitButton)
-        sizer.Add(quitButton, pos=(10, 3), flag=wx.BOTTOM|wx.RIGHT, border=5)
+        sizer.Add(quitButton, pos=(11, 3), flag=wx.BOTTOM|wx.RIGHT, border=5)
 
         panel.SetSizer(sizer)
 
