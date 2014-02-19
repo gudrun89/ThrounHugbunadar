@@ -9,15 +9,25 @@ class Test(unittest.TestCase):
   
   def test_Account1(self):
     acc = Heidursmerki(100,5000)
-    self.assertGreater(acc.creditAfterMonths(acc.deposit,12),5000)
+    self.assertGreater(acc.creditAfterMonths(acc.credit,acc.deposit,12),5000)
       
   def test_Account2(self):
     acc = Sparileid36(100,5000)
-    self.assertGreater(acc.monthsToGoal(6000),12)
+    self.assertLess(acc.monthsToGoal(6000),12)
       
   def test_Account3(self):
     acc = Sparileid48(100,5000)
     self.assertGreater(acc.accountDevelopment(12),11)
+	
+  def test_Account4(self):
+	acc1 = Vaxtathrep(999999, 1000)
+	acc2 = Vaxtathrep(1000000, 1000)
+	self.assertLess(acc1.interest,acc2.interest)
+	
+  def test_Account5(self):
+	acc1 = Vaxtathrep(70000000, 1000)
+	acc2 = Vaxtathrep(80000000, 1000)
+	self.assertLess(acc1.interest, acc2.interest)
 
   def test_Spara1(self):
     test = Spara(1000,100,2000,1)
