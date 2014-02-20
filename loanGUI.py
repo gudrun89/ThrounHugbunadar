@@ -11,8 +11,8 @@ class loanGUI(wx.Frame):
 
     def __init__(self, parent, title):    
         super(loanGUI, self).__init__(parent, title=title, size=(600, 600))
-        self.numLoans = 1
-        self.userLoans = []
+        self.numLoans = 1                                                   # number of loans from the user
+        self.userLoans = []                                                 # list of the loans from the user
         self.InitUI()
         self.Show()
 
@@ -23,7 +23,7 @@ class loanGUI(wx.Frame):
         
         # Window Title
         guiTitle = wx.StaticText(panel, label="Loan Calculator")
-        titleFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)             # TO-DO: Breyta fontinum, er ljotur nuna
+        titleFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD) 
         guiTitle.SetFont(titleFont)
         sizer.Add(guiTitle, pos=(0, 0), flag=wx.ALL, border=15)
         line = wx.StaticLine(panel)
@@ -123,6 +123,8 @@ class loanGUI(wx.Frame):
         panel.SetSizer(sizer)
 
 
+    # Pre:  is called when plotButton is clicked
+    # Post: plots the loan development, given the user inputs
     def plotLoan(self, event):
         prin = self.principalInput.GetValue()
         dur = int(self.durInput.GetValue())
@@ -131,6 +133,8 @@ class loanGUI(wx.Frame):
         loan = Loan(prin, interest, False, True, dur)
         loan.plotLoanDevelopment()
 
+    # Pre:  is called when addButton is clicked
+    # Post: adds an object of type Loan to the userLoans list
     def addLoan(self, event):
         prin = self.principalInput.GetValue()
         dur = int(self.durInput.GetValue())
@@ -149,15 +153,21 @@ class loanGUI(wx.Frame):
         self.numLoans += 1
         self.nameInput.SetValue('Loan ' + str(self.numLoans))
 
+    # Pre:  is called when the quitButton is clicked
+    # Post: closes the GUI window
     def onQuitButton(self, event):
         self.Close()
 
+    # Pre:  is called when the backButton is clicked
+    # Post: closes the GUI window and opens the start GUI window
     def onBackButton(self, event):
         self.Close()
         app = wx.App()
         startGUI(None, title="Money Thinker")
         app.MainLoop()
 
+    # Pre:  is called when the value in the user loan combobox is changed
+    # Post: fills in the input blanks according to the loan characteristics
     def onUserLoanChange(self, event):
         loanNum = event.GetEventObject().GetCurrentSelection()
         loan = self.userLoans[loanNum]
@@ -174,15 +184,18 @@ class loanGUI(wx.Frame):
             self.paymentBox.SetSelection(1)
 
 
+    # Pre:  is called when the calculateButton is clicked
+    # Post: returns the loan or the account that will save the user the most money
     def onCalculateButton(self, event):
         accs = [cls(0,0) for cls in Account.__subclasses__()] 
         maxLn = max([(ln.monthPrinDecrease(float(self.saveAmountInput.GetValue())), ln.nameString) for ln in self.userLoans])
         maxSave = max([(acc.monthProfit(float(self.saveAmountInput.GetValue())), acc.getName()) for acc in accs])
         maxResult = max(maxLn, maxSave)
         self.saveResult.SetValue('You save: ' + str(maxResult[0]) + ' on ' + str(maxResult[1]))
-        print max(maxLn, maxSave)
         return max(maxLn, maxSave)
 
+    # Pre:  is called when the inflButton is clicked
+    # Post: sets the inflation as the average inflation of last 12 months
     def onInflButton(self, event):
         self.inflationInput.SetValue(str(averageindexed(276,288)*100))
         

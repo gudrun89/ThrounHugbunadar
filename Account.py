@@ -15,11 +15,11 @@ class Account(object):
     def transfer(self, amount):             # adds amount to the account credit
         self.credit += amount
 
-    # Tekur inn upphaed og fjolda manuda
-    # Skilar hversu ha upphaedin verdur ordin a reikningnum ad manudunum loknum, ef reikningur er ekki bundinn tad lengi, annars -inf
+
+    # Pre:  credit is the account credit, deposit is the amount to be deposited,
+    #       months is the number of months the development of the account is calculated
+    # Post: returns the credit on the account after 'months' months
     def creditAfterMonths(self, credit, deposit, months):
-        #if (months < self.fixed):
-        #    return float('-infinity')
         interest = self.interest
         if (self.indexed):
             interest += averageindexed(276, 288)
@@ -28,7 +28,9 @@ class Account(object):
             credit *= (interest/12+1)
         return credit
 
-    # returns number of months required to reach the goal credit
+
+    # Pre:  goal is the goal credit on the account
+    # Post: returns the months until the account credit will reach the goal
     def monthsToGoal(self, goal):
         credit = self.credit
         m = 0
@@ -38,17 +40,19 @@ class Account(object):
             m += 1
         return m
 
-    # returns the development of the account for 'months' months
+    # Pre:  months is the number of months the development of the acocunt is calculated
+    # Post: returns a list of the account credit for 'months' months
     def accountDevelopment(self, months):
         return map(lambda x: self.creditAfterMonths(self.credit, self.deposit, x), range(months+1))
 
-    # returns the increased profit after one month from adding amnt on the account
+    # Pre:  amnt is the amount added on the account
+    # Post: returns the increased profit after one month from adding amnt on the account
     def monthProfit(self, amnt):
         return amnt * self.interest/12 
+
     
-    #Notkun: self.plotAcc(months)
-    #Fyrir: Acc er hlutur af taginu Account, months og goal eru heiltolur 
-    #Eftir: Buid er ad teikna voxt reikningsins yfir manadarfjolda months
+    # Pre:  months is the number of months to plot
+    # Post: the development of the account has been plotted for 'months' months
     def plotAcc(self, months=None, goal=None):
 
         if (months is None):
@@ -74,6 +78,9 @@ class Account(object):
             plt.legend([p1], ['Fixed'], loc = 2)
         plt.show()
 
+#
+# Different Account subclasses
+#
 
 class Heidursmerki(Account):
     def __init__(self, credit, deposit):
@@ -173,12 +180,17 @@ class Fastvaxtareikningur12(Account):
         self.monthly = True
         super(Fastvaxtareikningur12, self).__init__(credit, deposit)
 
-# Tekur inn upphaed og fjolda manada
-# Skilar teim reikningi sem gefur haesta upphaed ad manudunum loknum og hversu ha hun er
+# Pre:  deposit is the amount to be deposited on an account, months is the number of months
+#       to deposit the amount for
+# Post: returns the type of account that gives the highest amount after 'months' months and
+#       how much it is
 def getBestAccount(deposit, months):
     accs = [cls(0,0) for cls in Account.__subclasses__()]   #einn hlutur af hverjum klasa
     return max([(acc.creditAfterMonths(deposit, 0, months), acc) for acc in accs])
 
+# Pre:  acc1 and acc2 are objects of type Account, months is the number of months to plot the
+#       accounts development for, accName1 and accName2 are optional name strings for the accounts
+# Post: the development of acc1 and acc2 has been plotted on the same graph for comparison
 def comparePlots(acc1, acc2, months, accName1=None, accName2=None):
     p1, = plt.plot(range(months+1), acc1.accountDevelopment(months), 'g')
     p2, = plt.plot(range(months+1), acc2.accountDevelopment(months), 'm')

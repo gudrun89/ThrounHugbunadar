@@ -10,8 +10,7 @@ class savingsGUI(wx.Frame):
     def __init__(self, parent, title):    
         super(savingsGUI, self).__init__(parent, title=title,size=(550, 450))
         self.InitUI()
-        self.Show()
-        self.userAccounts = []
+        self.Show()                                             
 
     def InitUI(self):
       
@@ -20,7 +19,7 @@ class savingsGUI(wx.Frame):
 
         # Window title
         guiTitle = wx.StaticText(panel, label="Savings")
-        titleFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)             # TO-DO: Breyta fontinum, er ljotur nuna
+        titleFont = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.BOLD)             
         guiTitle.SetFont(titleFont)
         sizer.Add(guiTitle, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=15)
         line = wx.StaticLine(panel)
@@ -31,7 +30,6 @@ class savingsGUI(wx.Frame):
         sizer.Add(accType, pos=(2, 0), flag=wx.LEFT, border=10)
         accs = [acc.__name__ for acc in Account.__subclasses__()]
         self.accTypeInput = wx.ComboBox(panel, choices=accs, style=wx.CB_READONLY)
-        #self.accTypeInput.SetValue(accs[0])
         self.accTypeInput.Bind(wx.EVT_COMBOBOX, self.onAccTypeChange)
         sizer.Add(self.accTypeInput, pos=(2, 1), flag=wx.TOP|wx.EXPAND)
 
@@ -110,12 +108,16 @@ class savingsGUI(wx.Frame):
 
         panel.SetSizer(sizer)
 
+    # Pre:  is called when the account type combobox value is changed
+    # Post: fills in the user input blanks for interest and fixed according to the account
     def onAccTypeChange(self, event):
         accTypeNum = event.GetEventObject().GetCurrentSelection()
         acc = Account.__subclasses__()[accTypeNum](0,0)                # creates new instance of the account type
         self.interestInput.SetValue(str(acc.interest*100))
         self.fixedInput.SetValue(str(acc.fixed))
 
+    # Pre:  is called when the okButton is clicked
+    # Post: plots the development of the account according to the user inputs
     def onOkButton(self, event):
         accTypeNum = self.accTypeInput.GetCurrentSelection()
         acc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), float(self.depositInput.GetValue()))
@@ -124,6 +126,8 @@ class savingsGUI(wx.Frame):
         else:
             acc.plotAcc(int(self.durInput.GetValue()), float(self.goalInput.GetValue()))
 
+    # Pre:  is called when the compareButton is clicked
+    # Post: plots the development of the account with the two different monthly deposits
     def onCompareButton(self, event):
         accTypeNum = self.accTypeInput.GetCurrentSelection()
         acc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), float(self.depositInput.GetValue()))
@@ -132,12 +136,16 @@ class savingsGUI(wx.Frame):
         noDepAcc = Account.__subclasses__()[accTypeNum](float(self.creditInput.GetValue()), float(self.dep2Input.GetValue()))
         comparePlots(acc, noDepAcc, int(self.durInput.GetValue()), 'Monthly deposit', 'No deposit')
 
+    # Pre:  is called when the backButton is clicked
+    # Post: closes the GUI window and opens the start GUI window
     def onBackButton(self, event):
         self.Close()
         app = wx.App()
         startGUI(None, title="Money Thinker")
         app.MainLoop()
 
+    # Pre:  is called when the quitButton is clicked
+    # Post: closes the GUI window
     def onQuitButton(self, event):
         self.Close()
         
